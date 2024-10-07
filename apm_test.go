@@ -1,4 +1,4 @@
-package utils_apm
+package elasticapm
 
 import (
 	"testing"
