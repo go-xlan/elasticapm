@@ -22,7 +22,7 @@ func INIT(cfg *Config) error {
 
 	zaplog.LOG.Debug("init apm success")
 	//设置日志
-	apm.DefaultTracer().SetLogger(apmzaplog.NewSug(zaplog.ZAPS.P1.SUG))
+	apm.DefaultTracer().SetLogger(apmzaplog.NewSug(zaplog.ZAPS.Skip1.SUG))
 	return nil
 }
 
