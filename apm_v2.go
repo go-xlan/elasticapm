@@ -9,43 +9,39 @@ import (
 	"go.uber.org/zap"
 )
 
-// INIT 初始化全局的APM，需要校验 agentVersion 是因为有可能系统里是 2.0.0 而新项目用的是 2.0.1 的，或者总之就是出现版本不匹配的情况
-func INIT(cfg *Config) error {
-	var evo = NewEnvOption()
-
-	zaplog.SUG.Info("init apm cfg=" + neatjsons.S(cfg))
-	zaplog.SUG.Info("init apm evo=" + neatjsons.S(evo))
-
-	if err := INIT2(cfg, evo); err != nil {
+// Initialize 初始化全局的APM，需要校验 agentVersion 是因为有可能系统里是 2.0.0 而新项目用的是 2.0.1 的，或者总之就是出现版本不匹配的情况
+func Initialize(cfg *Config) error {
+	if err := InitializeWithOptions(cfg, NewEnvOption()); err != nil {
 		return erero.Wro(err)
 	}
-
-	zaplog.LOG.Debug("init apm success")
+	zaplog.LOG.Debug("Initialize apm success")
 	//设置日志
 	apm.DefaultTracer().SetLogger(apmzaplog.NewSug(zaplog.ZAPS.Skip1.SUG))
 	return nil
 }
 
-func INIT2(cfg *Config, evo *EnvOption, setEnvs ...func()) error {
-	if cfg.ServerUrx == "" && len(cfg.ServerUrls) == 0 {
-		zaplog.LOG.Debug("no apm urx. not init apm")
-		return erero.New("no apm urx")
+func InitializeWithOptions(cfg *Config, evo *EnvOption, setEnvs ...func()) error {
+	zaplog.SUG.Info("Initialize apm cfg=" + neatjsons.S(cfg))
+	zaplog.SUG.Info("Initialize apm evo=" + neatjsons.S(evo))
+
+	if cfg.ServerUrl == "" && len(cfg.ServerUrls) == 0 {
+		return erero.New("APM server URL is missing")
 	}
 
 	cfg.SetEnv(evo)
 
-	for _, set := range setEnvs {
-		set() //设置环境变量
+	for _, setFunc := range setEnvs {
+		setFunc() //设置环境变量
 	}
 
-	zaplog.LOG.Debug("init apm", zap.String("service_name", cfg.ServiceName), zap.String("agent_version", apm.AgentVersion))
+	zaplog.LOG.Debug("Initialize apm", zap.String("service_name", cfg.ServiceName), zap.String("agent_version", apm.AgentVersion))
 
-	atc, err := apm.NewTracer(cfg.ServiceName, cfg.ServiceVersion)
+	tracer, err := apm.NewTracer(cfg.ServiceName, cfg.ServiceVersion)
 	if err != nil {
 		return erero.Wro(err)
 	}
-	apm.SetDefaultTracer(atc)
+	apm.SetDefaultTracer(tracer)
 
-	zaplog.LOG.Debug("init apm success")
+	zaplog.LOG.Debug("Initialize apm success")
 	return nil
 }

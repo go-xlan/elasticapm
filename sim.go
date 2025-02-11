@@ -59,8 +59,8 @@ func SetLog(LOG apm.Logger) {
 }
 
 func Close() {
-	atc := apm.DefaultTracer()
-	atc.Flush(nil) //直接带个刷缓冲即可，否则程序快速退出时没数据
-	atc.Close()
-	zaplog.SUG.Debug(neatjsons.S(atc.Stats()))
+	tracer := apm.DefaultTracer()
+	tracer.Flush(nil) //直接带个刷缓冲即可，否则程序快速退出时没数据
+	tracer.Close()
+	zaplog.SUG.Debug(neatjsons.S(tracer.Stats()))
 }

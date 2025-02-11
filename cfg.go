@@ -11,7 +11,7 @@ import (
 type Config struct {
 	Environment    string
 	ServerUrls     []string
-	ServerUrx      string
+	ServerUrl      string
 	ApiKey         string `json:"-"`
 	SecretToken    string `json:"-"`
 	ServiceName    string
@@ -26,7 +26,7 @@ func (cfg *Config) SetEnv(evo *EnvOption) {
 	evo.SetEnv("ELASTIC_APM_ENVIRONMENT", cfg.Environment)
 
 	evo.SetEnv("ELASTIC_APM_SERVER_URLS", strings.Join(cfg.ServerUrls, ","))
-	evo.SetEnv("ELASTIC_APM_SERVER_URL", cfg.ServerUrx)
+	evo.SetEnv("ELASTIC_APM_SERVER_URL", cfg.ServerUrl)
 
 	evo.SetEnv("ELASTIC_APM_API_KEY", cfg.ApiKey)
 	evo.SetEnv("ELASTIC_APM_SECRET_TOKEN", cfg.SecretToken)
