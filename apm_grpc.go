@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-func StartApmTxnTraceGrpcOutgoing(ctx context.Context, name, apmTxnType string) (*apm.Transaction, context.Context) {
+func StartApmTraceGrpcOutgoingCtx(ctx context.Context, name, apmTxnType string) (*apm.Transaction, context.Context) {
 	apmTransaction := apm.DefaultTracer().StartTransaction(name, apmTxnType)
 	ctx = ContextWithTraceGrpcOutgoing(ctx, apmTransaction)
 	return apmTransaction, ctx

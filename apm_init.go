@@ -16,7 +16,7 @@ func Initialize(cfg *Config) error {
 	}
 	zaplog.LOG.Debug("Initialize apm success")
 	//设置日志
-	apm.DefaultTracer().SetLogger(apmzaplog.NewSug(zaplog.ZAPS.Skip1.SUG))
+	apm.DefaultTracer().SetLogger(apmzaplog.NewLog(zaplog.ZAPS.Skip1.SUG))
 	return nil
 }
 

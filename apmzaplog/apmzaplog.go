@@ -2,22 +2,22 @@ package apmzaplog
 
 import "go.uber.org/zap"
 
-type Sug struct {
-	sug *zap.SugaredLogger
+type Log struct {
+	sugaredLogger *zap.SugaredLogger
 }
 
-func NewSug(sug *zap.SugaredLogger) *Sug {
-	return &Sug{sug: sug}
+func NewLog(sugaredLogger *zap.SugaredLogger) *Log {
+	return &Log{sugaredLogger: sugaredLogger}
 }
 
-func (o *Sug) Debugf(format string, args ...interface{}) {
-	o.sug.Debugf(format, args...)
+func (o *Log) Debugf(format string, args ...interface{}) {
+	o.sugaredLogger.Debugf(format, args...)
 }
 
-func (o *Sug) Errorf(format string, args ...interface{}) {
-	o.sug.Errorf(format, args...)
+func (o *Log) Errorf(format string, args ...interface{}) {
+	o.sugaredLogger.Errorf(format, args...)
 }
 
-func (o *Sug) Warningf(format string, args ...interface{}) {
-	o.sug.Warnf(format, args...)
+func (o *Log) Warningf(format string, args ...interface{}) {
+	o.sugaredLogger.Warnf(format, args...)
 }
