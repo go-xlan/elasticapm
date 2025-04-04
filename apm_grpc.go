@@ -11,31 +11,15 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-func StartRequestTransaction(name string) *apm.Transaction {
-	return apm.DefaultTracer().StartTransaction(name, "request")
-}
-
-func StartTransaction(name, apmTxnType string) (apmTxn *apm.Transaction) {
-	return apm.DefaultTracer().StartTransaction(name, apmTxnType)
-}
-
-func ContextWithTransaction(ctx context.Context, apmTxn *apm.Transaction) context.Context {
-	return apm.ContextWithTransaction(ctx, apmTxn)
-}
-
-func TransactionFromContext(ctx context.Context) (transaction *apm.Transaction) {
-	return apm.TransactionFromContext(ctx)
-}
-
 func StartApmTxnTraceGrpcOutgoing(ctx context.Context, name, apmTxnType string) (*apm.Transaction, context.Context) {
-	apmTxn := StartTransaction(name, apmTxnType)
-	ctx = ContextWithTraceGrpcOutgoing(ctx, apmTxn)
-	return apmTxn, ctx
+	apmTransaction := apm.DefaultTracer().StartTransaction(name, apmTxnType)
+	ctx = ContextWithTraceGrpcOutgoing(ctx, apmTransaction)
+	return apmTransaction, ctx
 }
 
-func ContextWithTraceGrpcOutgoing(ctx context.Context, apmTxn *apm.Transaction) context.Context {
-	ctx = ContextWithTransaction(ctx, apmTxn)
-	ctx = ContextWithGrpcOutgoingTrace(ctx, apmTxn.TraceContext())
+func ContextWithTraceGrpcOutgoing(ctx context.Context, apmTransaction *apm.Transaction) context.Context {
+	ctx = apm.ContextWithTransaction(ctx, apmTransaction)
+	ctx = ContextWithGrpcOutgoingTrace(ctx, apmTransaction.TraceContext())
 	return ctx
 }
 
