@@ -9,14 +9,14 @@ import (
 	"go.uber.org/zap"
 )
 
-// Initialize 初始化全局的APM，需要校验 agentVersion 是因为有可能系统里是 2.0.0 而新项目用的是 2.0.1 的，或者总之就是出现版本不匹配的情况
+// Initialize 初始化全局的APM，使用的是 "go.elastic.co/apm/v2" 而非旧版的 ""go.elastic.co/apm" 依赖
 func Initialize(cfg *Config) error {
 	if err := InitializeWithOptions(cfg, NewEnvOption()); err != nil {
 		return erero.Wro(err)
 	}
 	zaplog.LOG.Debug("Initialize apm success")
 	//设置日志
-	apm.DefaultTracer().SetLogger(apmzaplog.NewLog(zaplog.ZAPS.Skip1.SUG))
+	apm.DefaultTracer().SetLogger(apmzaplog.NewLog())
 	return nil
 }
 

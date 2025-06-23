@@ -1,23 +1,23 @@
 package apmzaplog
 
-import "go.uber.org/zap"
+import (
+	"github.com/yyle88/zaplog"
+)
 
-type Log struct {
-	sugaredLogger *zap.SugaredLogger
-}
+type Log struct{}
 
-func NewLog(sugaredLogger *zap.SugaredLogger) *Log {
-	return &Log{sugaredLogger: sugaredLogger}
+func NewLog() *Log {
+	return &Log{}
 }
 
 func (o *Log) Debugf(format string, args ...interface{}) {
-	o.sugaredLogger.Debugf(format, args...)
+	zaplog.ZAPS.Skip(1).SUG.Debugf(format, args...)
 }
 
 func (o *Log) Errorf(format string, args ...interface{}) {
-	o.sugaredLogger.Errorf(format, args...)
+	zaplog.ZAPS.Skip(1).SUG.Errorf(format, args...)
 }
 
 func (o *Log) Warningf(format string, args ...interface{}) {
-	o.sugaredLogger.Warnf(format, args...)
+	zaplog.ZAPS.Skip(1).SUG.Warnf(format, args...)
 }
